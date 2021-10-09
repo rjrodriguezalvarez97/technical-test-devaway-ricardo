@@ -1,0 +1,29 @@
+{
+  "name": "technical-test-devaway-ricardo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "dev": "nodemon index.js",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rjrodriguezalvarez97/technical-test-devaway-ricardo.git"
+  },
+  "author": "Ricardo Rodriguez",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rjrodriguezalvarez97/technical-test-devaway-ricardo/issues"
+  },
+  "homepage": "https://github.com/rjrodriguezalvarez97/technical-test-devaway-ricardo#readme",
+  "devDependencies": {
+    "jest": "^27.2.5",
+    "nodemon": "^2.0.13"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^6.0.10"
+  }
+}
