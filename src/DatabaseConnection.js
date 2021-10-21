@@ -15,11 +15,11 @@ class DatabaseConnection {
     }
   }
 
-  static disconnect() {
+  static async disconnect() {
     return mongoose.disconnect();
   }
 
-  static dropDatabase() {
+  static async dropDatabase() {
     return mongoose.connection.db.dropDatabase();
   }
 }
