@@ -1,16 +1,26 @@
 const mongoose = require('mongoose');
 
 class DatabaseConnection {
-  static connect(server = 'localhost', database = 'Carl-Karts') {
-    mongoose
-      .connect(`mongodb://${server}/${database}`, {
+  static async connect(
+    { server, database } = { server: 'localhost', database: 'Carl-Karts' }
+  ) {
+    try {
+      await mongoose.connect(`mongodb://${server}/${database}`, {
         useNewUrlParser: true,
         useUnifiedTopology: true
-      })
-      .then(() =>
-        console.log(`Database connected on mongodb://${server}/${database}`)
-      )
-      .catch((e) => console.log(e));
+      });
+      console.log(`Database connected on mongodb://${server}/${database}`);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  static disconnect() {
+    return mongoose.disconnect();
+  }
+
+  static dropDatabase() {
+    return mongoose.connection.db.dropDatabase();
   }
 }
 

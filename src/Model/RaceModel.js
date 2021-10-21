@@ -1,10 +1,11 @@
 const mongoose = require('mongoose');
 
 const raceSchema = new mongoose.Schema({
+  name: String,
   laps: [
     {
-      drivers: { type: mongoose.Types.ObjectId, ref: 'Driver' },
-      time: Number
+      driver: { type: mongoose.Types.ObjectId, ref: 'Driver' },
+      time: String
     }
   ],
   drivers: [
