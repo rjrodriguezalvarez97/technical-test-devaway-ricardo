@@ -128,6 +128,62 @@ class ImportService {
     }
     return result;
   }
+
+  /**
+   * Method that will return all the championship information as an Array of Objects
+   * following the import format.
+   */
+  async export() {
+    const drivers = await this.DriverService.getAllDrivers();
+    const races = await this.RaceService.getAllRaces();
+    const data = drivers.reduce((accumulator, driver) => {
+      const exportedDriver = this.exportDriver(races, driver);
+      accumulator.push(exportedDriver);
+      return accumulator;
+    }, []);
+
+    return data;
+  }
+
+  /**
+   * Given all the races of the championship and a driver get an Object
+   * with all the information of the driver
+   *
+   * @param {Array} races
+   * @param {DriverModel} driver
+   */
+  exportDriver(races, driver) {
+    const filteredRaces = this.RaceService.getRacesOfDriver(races, driver._id);
+    const formattedRaces = this.formatDriverRacesForExport(
+      filteredRaces,
+      driver._id
+    );
+
+    const exportedDriver = {
+      _id: driver._id,
+      name: driver.name,
+      team: driver.team,
+      age: driver.age,
+      picture: driver.picture,
+      races: formattedRaces
+    };
+
+    return exportedDriver;
+  }
+
+  /**
+   * Given the races in which the driver participates get an array fo races with the format
+   * of the import json.
+   * @param {*} races
+   * @param {*} driverId
+   */
+  formatDriverRacesForExport(races, driverId) {
+    return races.reduce((accumulator, race) => {
+      const laps = this.RaceService.extractDriversLapsOfRace(race, driverId);
+      accumulator.push({ name: race.name, laps });
+      return accumulator;
+    }, []);
+  }
 }
 
 module.exports = ImportService;
