@@ -130,7 +130,8 @@ class ImportService {
   }
 
   /**
-   * Method that will return all the championship information as an Object
+   * Method that will return all the championship information as an Array of Objects
+   * following the import format.
    */
   async export() {
     const drivers = await this.DriverService.getAllDrivers();
