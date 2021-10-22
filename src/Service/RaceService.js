@@ -12,5 +12,26 @@ class RaceService {
     if (error) throw error;
     return created;
   }
+
+  getRacesOfDriverQuery(driverId) {
+    return this.Model.find({ drivers: driverId });
+  }
+
+  getAllRaces() {
+    return this.Model.find({});
+  }
+
+  getRacesOfDriver(races, driverId) {
+    return races.filter((race) => race.drivers.includes(driverId));
+  }
+
+  extractDriversLapsOfRace(race, driverId) {
+    return race.laps.reduce((accumulator, lap) => {
+      if (lap.driver === driverId) {
+        accumulator.push({ time: lap.time });
+      }
+      return accumulator;
+    }, []);
+  }
 }
 module.exports = RaceService;

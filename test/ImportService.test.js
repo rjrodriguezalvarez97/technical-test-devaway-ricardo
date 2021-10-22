@@ -1,10 +1,91 @@
 /* eslint-disable no-undef */
 const jsonData = require('./import.json');
 const ImportService = require('../src/Service/ImportService');
+const RaceService = require('../src/Service/RaceService');
+const DriverService = require('../src/Service/DriverService');
+
 const database = require('../src/DatabaseConnection');
 
 const importService = new ImportService();
+const parsedRaces = [
+  {
+    _id: '617195d20e743fec97692e04',
+    name: 'Race 0',
+    laps: [
+      {
+        driver: '5fd7dbd8ce3a40582fb9ee6b',
+        time: '00:11:03.697',
+        _id: '617195d20e743fec97692e0d'
+      },
+      {
+        driver: '5fd7dbd8ce3a40582fb9ee6b',
+        time: '00:08:20.226',
+        _id: '617195d20e743fec97692e0e'
+      },
+      {
+        driver: '5fd7dbd84c10103c125fc1af',
+        time: '00:08:39.615',
+        _id: '617195d20e743fec97692e0f'
+      },
+      {
+        driver: '5fd7dbd84c10103c125fc1af',
+        time: '00:08:35.276',
+        _id: '617195d20e743fec97692e10'
+      }
+    ],
+    drivers: ['5fd7dbd8ce3a40582fb9ee6b', '5fd7dbd84c10103c125fc1af'],
+    __v: 0
+  },
+  {
+    _id: '617195d20e743fec97692e19',
+    name: 'Race 1',
+    laps: [
+      {
+        driver: '5fd7dbd8ce3a40582fb9ee6b',
+        time: '00:08:12.974',
+        _id: '617195d20e743fec97692e22'
+      },
+      {
+        driver: '5fd7dbd8ce3a40582fb9ee6b',
+        time: '00:13:18.668',
+        _id: '617195d20e743fec97692e23'
+      },
+      {
+        driver: '5fd7dbd84c10103c125fc1af',
+        time: '00:13:52.998',
+        _id: '617195d20e743fec97692e24'
+      },
+      {
+        driver: '5fd7dbd84c10103c125fc1af',
+        time: '00:08:00.993',
+        _id: '617195d20e743fec97692e25'
+      }
+    ],
+    drivers: ['5fd7dbd8ce3a40582fb9ee6b', '5fd7dbd84c10103c125fc1af'],
+    __v: 0
+  },
+  {
+    _id: '617195d20e743fec97692e19',
+    name: 'Race 3',
+    laps: [
+      {
+        driver: '5fd7dbd8ce3a40582fb9ee6b',
+        time: '00:08:17.974',
+        _id: '617195d20e743fec97692e22'
+      },
+      {
+        driver: '5fd7dbd8ce3a40582fb9ee6b',
+        time: '00:24:18.668',
+        _id: '617195d20e743fec97692e23'
+      }
+    ],
+    drivers: ['5fd7dbd8ce3a40582fb9ee6b'],
+    __v: 0
+  }
+];
 describe('ImportService tests', () => {
+  beforeEach(() => jest.clearAllMocks());
+
   it('Should parse laps', () => {
     const driverId = '1234';
     const laps = [
@@ -244,6 +325,193 @@ describe('ImportService tests', () => {
 
     expect(result).toEqual(expected);
   });
+
+  it("Should format driver's races for export", () => {
+    const driverId = '5fd7dbd84c10103c125fc1af';
+    const expected = [
+      {
+        name: 'Race 0',
+        laps: [
+          {
+            time: '00:08:39.615'
+          },
+          {
+            time: '00:08:35.276'
+          }
+        ]
+      },
+      {
+        name: 'Race 1',
+        laps: [
+          {
+            time: '00:13:52.998'
+          },
+          {
+            time: '00:08:00.993'
+          }
+        ]
+      }
+    ];
+    const [race1, race2] = parsedRaces;
+    const result = importService.formatDriverRacesForExport(
+      [race1, race2],
+      driverId
+    );
+
+    expect(result).toEqual(expected);
+  });
+
+  it('Should export a driver', () => {
+    const driver = {
+      _id: '5fd7dbd84c10103c125fc1af',
+      picture: 'http://placehold.it/64x64',
+      age: 30,
+      name: 'May Valentine',
+      team: 'CUBICIDE'
+    };
+    const expected = {
+      _id: '5fd7dbd84c10103c125fc1af',
+      picture: 'http://placehold.it/64x64',
+      age: 30,
+      name: 'May Valentine',
+      team: 'CUBICIDE',
+      races: [
+        {
+          name: 'Race 0',
+          laps: [
+            {
+              time: '00:08:39.615'
+            },
+            {
+              time: '00:08:35.276'
+            }
+          ]
+        },
+        {
+          name: 'Race 1',
+          laps: [
+            {
+              time: '00:13:52.998'
+            },
+            {
+              time: '00:08:00.993'
+            }
+          ]
+        }
+      ]
+    };
+
+    const result = importService.exportDriver(parsedRaces, driver);
+
+    expect(result).toEqual(expected);
+  });
+
+  it('Should export the championship', async () => {
+    const drivers = [
+      {
+        _id: '5fd7dbd8ce3a40582fb9ee6b',
+        picture: 'http://placehold.it/64x64',
+        age: 23,
+        name: 'Cooke Rivers',
+        team: 'PROTODYNE'
+      },
+      {
+        _id: '5fd7dbd84c10103c125fc1af',
+        picture: 'http://placehold.it/64x64',
+        age: 30,
+        name: 'May Valentine',
+        team: 'CUBICIDE'
+      }
+    ];
+    const expected = [
+      {
+        _id: '5fd7dbd8ce3a40582fb9ee6b',
+        picture: 'http://placehold.it/64x64',
+        age: 23,
+        name: 'Cooke Rivers',
+        team: 'PROTODYNE',
+        races: [
+          {
+            name: 'Race 0',
+            laps: [
+              {
+                time: '00:11:03.697'
+              },
+              {
+                time: '00:08:20.226'
+              }
+            ]
+          },
+          {
+            name: 'Race 1',
+            laps: [
+              {
+                time: '00:08:12.974'
+              },
+              {
+                time: '00:13:18.668'
+              }
+            ]
+          },
+          {
+            name: 'Race 3',
+            laps: [
+              {
+                time: '00:08:17.974'
+              },
+              {
+                time: '00:24:18.668'
+              }
+            ]
+          }
+        ]
+      },
+      {
+        _id: '5fd7dbd84c10103c125fc1af',
+        picture: 'http://placehold.it/64x64',
+        age: 30,
+        name: 'May Valentine',
+        team: 'CUBICIDE',
+        races: [
+          {
+            name: 'Race 0',
+            laps: [
+              {
+                time: '00:08:39.615'
+              },
+              {
+                time: '00:08:35.276'
+              }
+            ]
+          },
+          {
+            name: 'Race 1',
+            laps: [
+              {
+                time: '00:13:52.998'
+              },
+              {
+                time: '00:08:00.993'
+              }
+            ]
+          }
+        ]
+      }
+    ];
+    const raceService = new RaceService();
+    const driverService = new DriverService();
+    const service = new ImportService({ raceService, driverService });
+    jest
+      .spyOn(raceService, 'getAllRaces')
+      .mockImplementationOnce(() => parsedRaces);
+    jest
+      .spyOn(driverService, 'getAllDrivers')
+      .mockImplementationOnce(() => drivers);
+
+    const result = await service.export();
+
+    expect(result).toEqual(expected);
+  });
 });
 
 describe('ImportService database tests', () => {
@@ -346,7 +614,6 @@ describe('ImportService database tests', () => {
     expect(saved.length).toBe(docs.length);
   });
   it('Full import test', async () => {
-    // const rawdata = fs.readFileSync('import.json');
     const result = await importService.import(jsonData);
 
     expect(result.length).toBe(4);

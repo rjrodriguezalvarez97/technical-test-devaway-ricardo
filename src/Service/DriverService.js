@@ -11,6 +11,10 @@ class DriverService {
     if (error) throw error;
     return created;
   }
+
+  getAllDrivers() {
+    return this.Model.find({});
+  }
 }
 
 module.exports = DriverService;

@@ -128,6 +128,51 @@ class ImportService {
     }
     return result;
   }
+
+  async export() {
+    const drivers = await this.DriverService.getAllDrivers();
+    const races = await this.RaceService.getAllRaces();
+    const data = drivers.reduce((accumulator, driver) => {
+      const exportedDriver = this.exportDriver(races, driver);
+      accumulator.push(exportedDriver);
+      return accumulator;
+    }, []);
+
+    return data;
+  }
+
+  exportDriver(races, driver) {
+    const filteredRaces = this.RaceService.getRacesOfDriver(races, driver._id);
+    const formattedRaces = this.formatDriverRacesForExport(
+      filteredRaces,
+      driver._id
+    );
+
+    const exportedDriver = {
+      _id: driver._id,
+      name: driver.name,
+      team: driver.team,
+      age: driver.age,
+      picture: driver.picture,
+      races: formattedRaces
+    };
+
+    return exportedDriver;
+  }
+
+  formatDriverRacesForExport(races, driverId) {
+    return races.reduce((accumulator, race) => {
+      const laps = this.RaceService.extractDriversLapsOfRace(race, driverId);
+      accumulator.push({ name: race.name, laps });
+      return accumulator;
+    }, []);
+  }
+
+  getRacesOfDrivers(drivers) {
+    return Promise.All(
+      drivers.map((driver) => this.RaceService.getRacesOfDriver(driver._id))
+    );
+  }
 }
 
 module.exports = ImportService;
