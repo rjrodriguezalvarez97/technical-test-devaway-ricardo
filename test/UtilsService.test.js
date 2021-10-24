@@ -17,4 +17,10 @@ describe('UtilsService', () => {
 
     expect(result).toBe(expected);
   });
+  it('Should round properly the ms', () => {
+    const seconds = 515.276;
+    const expected = '00:08:35.276';
+    const result = SecondsToTime(seconds);
+    expect(result).toBe(expected);
+  });
 });
