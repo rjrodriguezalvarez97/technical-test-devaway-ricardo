@@ -131,4 +131,94 @@ describe('RaceService tests', () => {
 
     expect(result).toEqual(expected);
   });
+
+  it('Should get the fastest lap', () => {
+    const laps = [
+      {
+        time: '00:10:31.078'
+      },
+      {
+        time: '00:11:50.041'
+      },
+      {
+        time: '00:13:15.914'
+      },
+      {
+        time: '00:08:04.951'
+      }
+    ];
+
+    const result = raceService.getBestLap(laps);
+    const expected = laps[3].time;
+
+    expect(result).toEqual(expected);
+  });
+
+  it('Should calculate drivers total time and best lap', () => {
+    const expected = [
+      {
+        driver: '5fd7dbd8ce3a40582fb9ee6b',
+        totalTime: 1163.923,
+        bestLap: '00:08:20.226',
+        points: 0
+      },
+      {
+        driver: '5fd7dbd84c10103c125fc1af',
+        totalTime: 1034.891,
+        bestLap: '00:08:35.276',
+        points: 0
+      }
+    ];
+
+    const result = raceService.calculateDriversTimeAndBestLap(races[0]);
+
+    expect(result).toEqual(expected);
+  });
+});
+
+it('Should calculate the points and order of a race', () => {
+  const drivers = [
+    {
+      driver: '789',
+      totalTime: 1500.789,
+      bestLap: '00:08:20.225',
+      points: 0
+    },
+    {
+      driver: '123',
+      totalTime: 1163.923,
+      bestLap: '00:08:20.226',
+      points: 0
+    },
+    {
+      driver: '456',
+      totalTime: 1034.891,
+      bestLap: '00:08:35.276',
+      points: 0
+    }
+  ];
+  const expected = [
+    {
+      driver: '456',
+      totalTime: 1034.891,
+      bestLap: '00:08:35.276',
+      points: 25
+    },
+    {
+      driver: '123',
+      totalTime: 1163.923,
+      bestLap: '00:08:20.226',
+      points: 18
+    },
+    {
+      driver: '789',
+      totalTime: 1500.789,
+      bestLap: '00:08:20.225',
+      points: 16
+    }
+  ];
+
+  const result = raceService.calculatePointsOfRace(drivers);
+
+  expect(result).toEqual(expected);
 });
