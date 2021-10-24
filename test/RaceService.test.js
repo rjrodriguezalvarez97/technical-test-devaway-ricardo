@@ -272,4 +272,40 @@ describe('RaceService tests', () => {
 
     expect(result).toEqual(expected);
   });
+
+  it('Should get driver details', () => {
+    const driverId = '5fd7dbd8ce3a40582fb9ee6b';
+    const expected = [
+      {
+        name: 'Race 0',
+        driver: '5fd7dbd8ce3a40582fb9ee6b',
+        totalTime: 1163.923,
+        totalTimeString: '00:19:23.923',
+        points: 19,
+        bestLap: '00:08:20.226'
+      },
+      {
+        name: 'Race 1',
+        driver: '5fd7dbd8ce3a40582fb9ee6b',
+        totalTime: 1291.642,
+        totalTimeString: '00:21:31.642',
+        points: 25,
+        bestLap: '00:08:12.974'
+      },
+      {
+        name: 'Race 3',
+        driver: '5fd7dbd8ce3a40582fb9ee6b',
+        totalTime: 1291.642,
+        totalTimeString: '00:21:31.642',
+        points: 26,
+        bestLap: '00:08:12.974'
+      }
+    ];
+    jest
+      .spyOn(raceService, 'getRacesOfDriverQuery')
+      .mockImplementationOnce(() => races);
+    const result = raceService.getDriverDetails(driverId);
+
+    expect(result).toEqual(expected);
+  });
 });

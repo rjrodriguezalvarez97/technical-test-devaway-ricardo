@@ -184,5 +184,25 @@ class RaceService {
 
     return ranking;
   }
+
+  /**
+   * Get all the driver's rank of a championship
+   * @param {String} driverId
+   */
+  getDriverDetails(driverId) {
+    const races = this.getRacesOfDriverQuery(driverId);
+    const rankingOfRaces = races.map((race) => this.getRaceRanking(race));
+    const ranksOfDriver = rankingOfRaces.reduce((acc, race) => {
+      for (let i = 0; i < race.ranking.length; i++) {
+        const ranking = race.ranking[i];
+        if (ranking.driver === driverId) {
+          acc.push({ name: race.name, ...ranking });
+          break;
+        }
+      }
+      return acc;
+    }, []);
+    return ranksOfDriver;
+  }
 }
 module.exports = RaceService;
