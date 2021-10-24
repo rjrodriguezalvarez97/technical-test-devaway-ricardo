@@ -80,6 +80,8 @@ const races = [
   }
 ];
 describe('RaceService tests', () => {
+  beforeEach(() => jest.clearAllMocks());
+
   it('Should get races of driver', () => {
     const driverId = '5fd7dbd84c10103c125fc1af';
     const result = raceService.getRacesOfDriver(races, driverId);
@@ -159,12 +161,14 @@ describe('RaceService tests', () => {
       {
         driver: '5fd7dbd8ce3a40582fb9ee6b',
         totalTime: 1163.923,
+        totalTimeString: '00:19:23.923',
         bestLap: '00:08:20.226',
         points: 0
       },
       {
         driver: '5fd7dbd84c10103c125fc1af',
         totalTime: 1034.891,
+        totalTimeString: '00:17:14.891',
         bestLap: '00:08:35.276',
         points: 0
       }
@@ -229,19 +233,42 @@ describe('RaceService tests', () => {
       ranking: [
         {
           driver: '5fd7dbd84c10103c125fc1af',
-          totalTime: '00:17:14.891',
+          totalTimeString: '00:17:14.891',
+          totalTime: 1034.891,
           points: 25,
           bestLap: '00:08:35.276'
         },
         {
           driver: '5fd7dbd8ce3a40582fb9ee6b',
-          totalTime: '00:19:23.923',
+          totalTime: 1163.923,
+          totalTimeString: '00:19:23.923',
           points: 19,
           bestLap: '00:08:20.226'
         }
       ]
     };
     const result = raceService.getRaceRanking(races[0]);
+
+    expect(result).toEqual(expected);
+  });
+
+  it('Should get the championship ranking', () => {
+    const expected = [
+      {
+        driver: '5fd7dbd8ce3a40582fb9ee6b',
+        totalTime: 3747.207,
+        points: 19 + 25 + 25 + 1,
+        totalTimeString: '01:02:27.207'
+      },
+      {
+        driver: '5fd7dbd84c10103c125fc1af',
+        totalTimeString: '00:39:08.882',
+        totalTime: 2348.882,
+        points: 25 + 18 + 1
+      }
+    ];
+    jest.spyOn(raceService, 'getAllRaces').mockImplementationOnce(() => races);
+    const result = raceService.getChampionshipRanking();
 
     expect(result).toEqual(expected);
   });
