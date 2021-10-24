@@ -174,51 +174,75 @@ describe('RaceService tests', () => {
 
     expect(result).toEqual(expected);
   });
-});
 
-it('Should calculate the points and order of a race', () => {
-  const drivers = [
-    {
-      driver: '789',
-      totalTime: 1500.789,
-      bestLap: '00:08:20.225',
-      points: 0
-    },
-    {
-      driver: '123',
-      totalTime: 1163.923,
-      bestLap: '00:08:20.226',
-      points: 0
-    },
-    {
-      driver: '456',
-      totalTime: 1034.891,
-      bestLap: '00:08:35.276',
-      points: 0
-    }
-  ];
-  const expected = [
-    {
-      driver: '456',
-      totalTime: 1034.891,
-      bestLap: '00:08:35.276',
-      points: 25
-    },
-    {
-      driver: '123',
-      totalTime: 1163.923,
-      bestLap: '00:08:20.226',
-      points: 18
-    },
-    {
-      driver: '789',
-      totalTime: 1500.789,
-      bestLap: '00:08:20.225',
-      points: 16
-    }
-  ];
+  it('Should calculate the points and order of a race', () => {
+    const drivers = [
+      {
+        driver: '789',
+        totalTime: 1500.789,
+        bestLap: '00:08:20.225',
+        points: 0
+      },
+      {
+        driver: '123',
+        totalTime: 1163.923,
+        bestLap: '00:08:20.226',
+        points: 0
+      },
+      {
+        driver: '456',
+        totalTime: 1034.891,
+        bestLap: '00:08:35.276',
+        points: 0
+      }
+    ];
+    const expected = [
+      {
+        driver: '456',
+        totalTime: 1034.891,
+        bestLap: '00:08:35.276',
+        points: 25
+      },
+      {
+        driver: '123',
+        totalTime: 1163.923,
+        bestLap: '00:08:20.226',
+        points: 18
+      },
+      {
+        driver: '789',
+        totalTime: 1500.789,
+        bestLap: '00:08:20.225',
+        points: 16
+      }
+    ];
 
-  const result = raceService.calculatePointsOfRace(drivers);
+    const result = raceService.calculatePointsOfRace(drivers);
 
-  expect(result).toEqual(expected);
+    expect(result).toEqual(expected);
+  });
+
+  it('Should get the ranking of a race', () => {
+    const expected = {
+      _id: '617195d20e743fec97692e04',
+      name: 'Race 0',
+      ranking: [
+        {
+          driver: '5fd7dbd84c10103c125fc1af',
+          totalTime: '00:17:14.891',
+          points: 25,
+          bestLap: '00:08:35.276'
+        },
+        {
+          driver: '5fd7dbd8ce3a40582fb9ee6b',
+          totalTime: '00:19:23.923',
+          points: 19,
+          bestLap: '00:08:20.226'
+        }
+      ]
+    };
+    const result = raceService.getRaceRanking(races[0]);
+
+    expect(result).toEqual(expected);
+  });
 });

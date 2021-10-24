@@ -109,5 +109,28 @@ class RaceService {
       };
     });
   }
+
+  /**
+   * Format totalTime as String
+   * @param {Array} ranking
+   */
+  formatTotalTime(ranking) {
+    return ranking.map((driver) => ({
+      ...driver,
+      totalTime: SecondsToTime(driver.totalTime)
+    }));
+  }
+
+  /**
+   * Get the ranking of a race
+   * @param {Race} race
+   */
+  getRaceRanking(race) {
+    const drivers = this.calculateDriversTimeAndBestLap(race);
+    const calculatedRanking = this.calculatePointsOfRace(drivers);
+    const ranking = this.formatTotalTime(calculatedRanking);
+
+    return { _id: race._id, name: race.name, ranking };
+  }
 }
 module.exports = RaceService;
