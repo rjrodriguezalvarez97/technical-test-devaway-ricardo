@@ -1,5 +1,5 @@
 const RaceModel = require('../Model/RaceModel');
-const { TimeToSeconds, SecondsToTime } = require('./UtilsService');
+const { TimeToSeconds, SecondsToTime, SortRanking } = require('./UtilsService');
 // We could refactor this into a parent class
 class RaceService {
   constructor(model) {
@@ -104,6 +104,7 @@ class RaceService {
       return {
         driver,
         totalTime,
+        totalTimeString: SecondsToTime(totalTime),
         bestLap,
         points: 0
       };
@@ -117,7 +118,7 @@ class RaceService {
   formatTotalTime(ranking) {
     return ranking.map((driver) => ({
       ...driver,
-      totalTime: SecondsToTime(driver.totalTime)
+      totalTimeString: SecondsToTime(driver.totalTime)
     }));
   }
 
@@ -127,10 +128,61 @@ class RaceService {
    */
   getRaceRanking(race) {
     const drivers = this.calculateDriversTimeAndBestLap(race);
-    const calculatedRanking = this.calculatePointsOfRace(drivers);
-    const ranking = this.formatTotalTime(calculatedRanking);
+    const ranking = this.calculatePointsOfRace(drivers);
 
     return { _id: race._id, name: race.name, ranking };
+  }
+
+  /**
+   * Given an array of ranks(final poisition of a driver for a given race) calculate
+   * the total points and time of a driver and return an array with the final ranking sorted
+   * by points
+   * @param {Array} races
+   */
+  calculateChampionshipRanking(ranks) {
+    const map = ranks.reduce((accumulator, rank) => {
+      const oldDriverData = accumulator.get(rank.driver);
+      if (!oldDriverData) {
+        // delete rank.bestLap;
+        const { bestLap, ...rankWithoutBestLap } = rank;
+
+        accumulator.set(rank.driver, rankWithoutBestLap);
+        return accumulator;
+      }
+      const totalTime = parseFloat(
+        (oldDriverData.totalTime + rank.totalTime).toFixed(3)
+      );
+
+      const newData = {
+        ...oldDriverData,
+        totalTime,
+        points: oldDriverData.points + rank.points
+      };
+
+      accumulator.set(newData.driver, newData);
+      return accumulator;
+    }, new Map());
+
+    const sorted = SortRanking(Array.from(map.values()));
+    const sortedWithTimeString = this.formatTotalTime(sorted);
+
+    return sortedWithTimeString;
+  }
+
+  /**
+   * Get the ranking of the championship
+   */
+  getChampionshipRanking() {
+    const races = this.getAllRaces();
+
+    // array of rankings, each ranking has the position(rank) of each driver
+    const rankingOfRaces = races.map(
+      (race) => this.getRaceRanking(race).ranking
+    );
+
+    const ranking = this.calculateChampionshipRanking(rankingOfRaces.flat());
+
+    return ranking;
   }
 }
 module.exports = RaceService;
