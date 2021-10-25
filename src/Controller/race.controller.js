@@ -1,6 +1,8 @@
 const RaceService = require('../Service/RaceService');
 const CustomError = require('./CustomError');
+const DriverService = require('../Service/DriverService');
 
+const driverService = new DriverService();
 const raceService = new RaceService();
 module.exports = {
   async getRaceRanking(req, res) {
@@ -35,6 +37,29 @@ module.exports = {
         });
       }
       return res.json(championship);
+    } catch (err) {
+      return CustomError.handleError(err, res);
+    }
+  },
+  async getDriverDetails(req, res) {
+    const { id } = req.params;
+    try {
+      if (!id) {
+        throw new CustomError({
+          code: 400,
+          message: 'Missing driver id'
+        });
+      }
+      const driver = await driverService.getDriverById(id);
+      if (!driver) {
+        throw new CustomError({
+          code: 404,
+          message: 'Driver not found'
+        });
+      }
+      const driverDetails = await raceService.getDriverDetails(id);
+
+      return res.json(driverDetails);
     } catch (err) {
       return CustomError.handleError(err, res);
     }

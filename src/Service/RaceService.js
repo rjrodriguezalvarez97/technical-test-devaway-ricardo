@@ -200,8 +200,8 @@ class RaceService {
    * Get all the driver's rank of a championship
    * @param {String} driverId
    */
-  getDriverDetails(driverId) {
-    const races = this.getRacesOfDriverQuery(driverId);
+  async getDriverDetails(driverId) {
+    const races = await this.getRacesOfDriverQuery(driverId);
     const rankingOfRaces = races.map((race) => this.getRaceRanking(race));
     const ranksOfDriver = rankingOfRaces.reduce((acc, race) => {
       for (let i = 0; i < race.ranking.length; i++) {
