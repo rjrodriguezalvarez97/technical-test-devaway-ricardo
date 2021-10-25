@@ -153,14 +153,14 @@ class ImportService {
    * @param {DriverModel} driver
    */
   exportDriver(races, driver) {
-    const filteredRaces = this.RaceService.getRacesOfDriver(races, driver._id);
+    const filteredRaces = this.RaceService.getRacesOfDriver(races, driver.id);
     const formattedRaces = this.formatDriverRacesForExport(
       filteredRaces,
-      driver._id
+      driver.id
     );
 
     const exportedDriver = {
-      _id: driver._id,
+      _id: driver.id,
       name: driver.name,
       team: driver.team,
       age: driver.age,
@@ -178,11 +178,16 @@ class ImportService {
    * @param {*} driverId
    */
   formatDriverRacesForExport(races, driverId) {
-    return races.reduce((accumulator, race) => {
+    const unsorted = races.reduce((accumulator, race) => {
       const laps = this.RaceService.extractDriversLapsOfRace(race, driverId);
       accumulator.push({ name: race.name, laps });
       return accumulator;
     }, []);
+    return unsorted.sort((a, b) => {
+      if (a.name < b.name) return -1;
+      if (a.name > b.name) return 1;
+      return 0;
+    });
   }
 }
 

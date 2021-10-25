@@ -363,7 +363,7 @@ describe('ImportService tests', () => {
 
   it('Should export a driver', () => {
     const driver = {
-      _id: '5fd7dbd84c10103c125fc1af',
+      id: '5fd7dbd84c10103c125fc1af',
       picture: 'http://placehold.it/64x64',
       age: 30,
       name: 'May Valentine',
@@ -409,14 +409,14 @@ describe('ImportService tests', () => {
   it('Should export the championship', async () => {
     const drivers = [
       {
-        _id: '5fd7dbd8ce3a40582fb9ee6b',
+        id: '5fd7dbd8ce3a40582fb9ee6b',
         picture: 'http://placehold.it/64x64',
         age: 23,
         name: 'Cooke Rivers',
         team: 'PROTODYNE'
       },
       {
-        _id: '5fd7dbd84c10103c125fc1af',
+        id: '5fd7dbd84c10103c125fc1af',
         picture: 'http://placehold.it/64x64',
         age: 30,
         name: 'May Valentine',

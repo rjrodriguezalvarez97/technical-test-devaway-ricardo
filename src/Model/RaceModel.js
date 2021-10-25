@@ -4,7 +4,11 @@ const raceSchema = new mongoose.Schema({
   name: String,
   laps: [
     {
-      driver: { type: mongoose.Types.ObjectId, ref: 'Driver' },
+      driver: {
+        type: mongoose.Types.ObjectId,
+        ref: 'Driver',
+        get: (v) => v.toString()
+      },
       time: String
     }
   ],

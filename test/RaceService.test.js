@@ -252,7 +252,7 @@ describe('RaceService tests', () => {
     expect(result).toEqual(expected);
   });
 
-  it('Should get the championship ranking', () => {
+  it('Should get the championship ranking', async () => {
     const expected = [
       {
         driver: '5fd7dbd8ce3a40582fb9ee6b',
@@ -268,7 +268,7 @@ describe('RaceService tests', () => {
       }
     ];
     jest.spyOn(raceService, 'getAllRaces').mockImplementationOnce(() => races);
-    const result = raceService.getChampionshipRanking();
+    const result = await raceService.getChampionshipRanking();
 
     expect(result).toEqual(expected);
   });
