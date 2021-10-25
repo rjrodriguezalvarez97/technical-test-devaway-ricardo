@@ -172,8 +172,8 @@ class RaceService {
   /**
    * Get the ranking of the championship
    */
-  getChampionshipRanking() {
-    const races = this.getAllRaces();
+  async getChampionshipRanking() {
+    const races = await this.getAllRaces();
 
     // array of rankings, each ranking has the position(rank) of each driver
     const rankingOfRaces = races.map(
