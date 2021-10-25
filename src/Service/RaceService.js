@@ -21,6 +21,10 @@ class RaceService {
     return this.Model.find({});
   }
 
+  getRaceByName(name) {
+    return this.Model.findOne({ name });
+  }
+
   /**
    * Filter an array of races to get all of those that the driver raced
    * @param {Array} races
@@ -76,7 +80,9 @@ class RaceService {
     });
 
     for (let i = 0; i < ranking.length; i++) {
-      ranking[i].points += POINTS[i];
+      if (i < POINTS.length) {
+        ranking[i].points += POINTS[i];
+      }
       const lapTime = TimeToSeconds(ranking[i].bestLap);
       if (lapTime < fastestLap) {
         fastestLap = lapTime;
@@ -94,15 +100,20 @@ class RaceService {
    */
   calculateDriversTimeAndBestLap(race) {
     return race.drivers.map((driver) => {
-      const laps = this.extractDriversLapsOfRace(race, driver);
-      const totalTime = laps.reduce(
-        (accumulator, lap) => accumulator + TimeToSeconds(lap.time),
-        0
+      const driverId = String(driver);
+      const laps = this.extractDriversLapsOfRace(race, driverId);
+      const totalTime = parseFloat(
+        laps
+          .reduce(
+            (accumulator, lap) => accumulator + TimeToSeconds(lap.time),
+            0
+          )
+          .toFixed(3)
       );
       const bestLap = this.getBestLap(laps);
 
       return {
-        driver,
+        driver: driverId,
         totalTime,
         totalTimeString: SecondsToTime(totalTime),
         bestLap,
