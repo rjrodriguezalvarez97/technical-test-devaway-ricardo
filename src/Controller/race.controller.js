@@ -24,5 +24,19 @@ module.exports = {
     } catch (err) {
       return CustomError.handleError(err, res);
     }
+  },
+  async getChampionshipRanking(req, res) {
+    try {
+      const championship = await raceService.getChampionshipRanking();
+      if (!championship) {
+        throw new CustomError({
+          code: 500,
+          message: "Couldn't retrieve championship ranking"
+        });
+      }
+      return res.json(championship);
+    } catch (err) {
+      return CustomError.handleError(err, res);
+    }
   }
 };
