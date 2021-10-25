@@ -3,10 +3,10 @@ const router = require('./src/Routes/router');
 
 require('./src/DatabaseConnection').connect();
 
-// const router = require('./src/api/routes/router.js');
-
 const app = express();
 app.use(express.json({ limit: '1mb' }));
+app.use(express.urlencoded({ extended: false }));
+
 app.use(router());
 const PORT = process.env.PORT || '3000';
 
