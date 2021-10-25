@@ -2,7 +2,8 @@ const express = require('express');
 const { importData, exportData } = require('../Controller/import.controller');
 const {
   getRaceRanking,
-  getChampionshipRanking
+  getChampionshipRanking,
+  getDriverDetails
 } = require('../Controller/race.controller');
 
 module.exports = () => {
@@ -12,6 +13,7 @@ module.exports = () => {
   router.get('/export', exportData);
   router.get('/ranking/race', getRaceRanking);
   router.get('/ranking/', getChampionshipRanking);
+  router.get('/ranking/driver/:id', getDriverDetails);
 
   return router;
 };
