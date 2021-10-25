@@ -80,7 +80,7 @@ class RaceService {
     });
 
     for (let i = 0; i < ranking.length; i++) {
-      if (i < 10) {
+      if (i < POINTS.length) {
         ranking[i].points += POINTS[i];
       }
       const lapTime = TimeToSeconds(ranking[i].bestLap);

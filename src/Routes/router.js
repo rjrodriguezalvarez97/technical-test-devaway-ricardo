@@ -7,7 +7,7 @@ module.exports = () => {
 
   router.post('/import', importData);
   router.get('/export', exportData);
-
   router.get('/ranking/race', getRaceRanking);
+
   return router;
 };
