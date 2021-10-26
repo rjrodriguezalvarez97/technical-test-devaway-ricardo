@@ -29,7 +29,10 @@ const races = [
         _id: '617195d20e743fec97692e10'
       }
     ],
-    drivers: ['5fd7dbd8ce3a40582fb9ee6b', '5fd7dbd84c10103c125fc1af'],
+    drivers: [
+      { id: '5fd7dbd8ce3a40582fb9ee6b' },
+      { id: '5fd7dbd84c10103c125fc1af' }
+    ],
     __v: 0
   },
   {
@@ -57,7 +60,10 @@ const races = [
         _id: '617195d20e743fec97692e25'
       }
     ],
-    drivers: ['5fd7dbd8ce3a40582fb9ee6b', '5fd7dbd84c10103c125fc1af'],
+    drivers: [
+      { id: '5fd7dbd8ce3a40582fb9ee6b' },
+      { id: '5fd7dbd84c10103c125fc1af' }
+    ],
     __v: 0
   },
   {
@@ -75,8 +81,25 @@ const races = [
         _id: '617195d20e743fec97692e23'
       }
     ],
-    drivers: ['5fd7dbd8ce3a40582fb9ee6b'],
+    drivers: [{ id: '5fd7dbd8ce3a40582fb9ee6b' }],
     __v: 0
+  }
+];
+
+const driversData = [
+  {
+    id: '5fd7dbd8ce3a40582fb9ee6b',
+    picture: 'http://placehold.it/64x64',
+    age: 23,
+    name: 'Cooke Rivers',
+    team: 'PROTODYNE'
+  },
+  {
+    id: '5fd7dbd84c10103c125fc1af',
+    picture: 'http://placehold.it/64x64',
+    age: 30,
+    name: 'May Valentine',
+    team: 'CUBICIDE'
   }
 ];
 describe('RaceService tests', () => {
@@ -159,14 +182,14 @@ describe('RaceService tests', () => {
   it('Should calculate drivers total time and best lap', () => {
     const expected = [
       {
-        driver: '5fd7dbd8ce3a40582fb9ee6b',
+        driver: { id: '5fd7dbd8ce3a40582fb9ee6b' },
         totalTime: 1163.923,
         totalTimeString: '00:19:23.923',
         bestLap: '00:08:20.226',
         points: 0
       },
       {
-        driver: '5fd7dbd84c10103c125fc1af',
+        driver: { id: '5fd7dbd84c10103c125fc1af' },
         totalTime: 1034.891,
         totalTimeString: '00:17:14.891',
         bestLap: '00:08:35.276',
@@ -232,14 +255,14 @@ describe('RaceService tests', () => {
       name: 'Race 0',
       ranking: [
         {
-          driver: '5fd7dbd84c10103c125fc1af',
+          driver: { id: '5fd7dbd84c10103c125fc1af' },
           totalTimeString: '00:17:14.891',
           totalTime: 1034.891,
           points: 25,
           bestLap: '00:08:35.276'
         },
         {
-          driver: '5fd7dbd8ce3a40582fb9ee6b',
+          driver: { id: '5fd7dbd8ce3a40582fb9ee6b' },
           totalTime: 1163.923,
           totalTimeString: '00:19:23.923',
           points: 19,
@@ -255,13 +278,13 @@ describe('RaceService tests', () => {
   it('Should get the championship ranking', async () => {
     const expected = [
       {
-        driver: '5fd7dbd8ce3a40582fb9ee6b',
+        driver: { id: '5fd7dbd8ce3a40582fb9ee6b' },
         totalTime: 3747.207,
         points: 19 + 25 + 25 + 1,
         totalTimeString: '01:02:27.207'
       },
       {
-        driver: '5fd7dbd84c10103c125fc1af',
+        driver: { id: '5fd7dbd84c10103c125fc1af' },
         totalTimeString: '00:39:08.882',
         totalTime: 2348.882,
         points: 25 + 18 + 1
@@ -273,38 +296,37 @@ describe('RaceService tests', () => {
     expect(result).toEqual(expected);
   });
 
-  it('Should get driver details', () => {
-    const driverId = '5fd7dbd8ce3a40582fb9ee6b';
-    const expected = [
-      {
-        name: 'Race 0',
-        driver: '5fd7dbd8ce3a40582fb9ee6b',
-        totalTime: 1163.923,
-        totalTimeString: '00:19:23.923',
-        points: 19,
-        bestLap: '00:08:20.226'
-      },
-      {
-        name: 'Race 1',
-        driver: '5fd7dbd8ce3a40582fb9ee6b',
-        totalTime: 1291.642,
-        totalTimeString: '00:21:31.642',
-        points: 25,
-        bestLap: '00:08:12.974'
-      },
-      {
-        name: 'Race 3',
-        driver: '5fd7dbd8ce3a40582fb9ee6b',
-        totalTime: 1291.642,
-        totalTimeString: '00:21:31.642',
-        points: 26,
-        bestLap: '00:08:12.974'
-      }
-    ];
+  it('Should get driver details', async () => {
+    const expected = {
+      driver: driversData[0],
+      races: [
+        {
+          name: 'Race 0',
+          totalTime: 1163.923,
+          totalTimeString: '00:19:23.923',
+          points: 19,
+          bestLap: '00:08:20.226'
+        },
+        {
+          name: 'Race 1',
+          totalTime: 1291.642,
+          totalTimeString: '00:21:31.642',
+          points: 25,
+          bestLap: '00:08:12.974'
+        },
+        {
+          name: 'Race 3',
+          totalTime: 1291.642,
+          totalTimeString: '00:21:31.642',
+          points: 26,
+          bestLap: '00:08:12.974'
+        }
+      ]
+    };
     jest
       .spyOn(raceService, 'getRacesOfDriverQuery')
       .mockImplementationOnce(() => races);
-    const result = raceService.getDriverDetails(driverId);
+    const result = await raceService.getDriverDetails(driversData[0]);
 
     expect(result).toEqual(expected);
   });

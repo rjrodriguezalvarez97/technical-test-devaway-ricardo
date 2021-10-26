@@ -57,7 +57,7 @@ module.exports = {
           message: 'Driver not found'
         });
       }
-      const driverDetails = await raceService.getDriverDetails(id);
+      const driverDetails = await raceService.getDriverDetails(driver);
 
       return res.json(driverDetails);
     } catch (err) {
