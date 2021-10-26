@@ -33,7 +33,10 @@ const parsedRaces = [
         _id: '617195d20e743fec97692e10'
       }
     ],
-    drivers: ['5fd7dbd8ce3a40582fb9ee6b', '5fd7dbd84c10103c125fc1af'],
+    drivers: [
+      { id: '5fd7dbd8ce3a40582fb9ee6b' },
+      { id: '5fd7dbd84c10103c125fc1af' }
+    ],
     __v: 0
   },
   {
@@ -61,7 +64,10 @@ const parsedRaces = [
         _id: '617195d20e743fec97692e25'
       }
     ],
-    drivers: ['5fd7dbd8ce3a40582fb9ee6b', '5fd7dbd84c10103c125fc1af'],
+    drivers: [
+      { id: '5fd7dbd8ce3a40582fb9ee6b' },
+      { id: '5fd7dbd84c10103c125fc1af' }
+    ],
     __v: 0
   },
   {
@@ -79,7 +85,7 @@ const parsedRaces = [
         _id: '617195d20e743fec97692e23'
       }
     ],
-    drivers: ['5fd7dbd8ce3a40582fb9ee6b'],
+    drivers: [{ id: '5fd7dbd8ce3a40582fb9ee6b' }],
     __v: 0
   }
 ];

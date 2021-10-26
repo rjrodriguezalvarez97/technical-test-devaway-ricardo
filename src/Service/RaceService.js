@@ -18,11 +18,11 @@ class RaceService {
   }
 
   getAllRaces() {
-    return this.Model.find({});
+    return this.Model.find({}).populate('drivers');
   }
 
   getRaceByName(name) {
-    return this.Model.findOne({ name });
+    return this.Model.findOne({ name }).populate('drivers');
   }
 
   /**
@@ -31,7 +31,12 @@ class RaceService {
    * @param {String} driverId
    */
   getRacesOfDriver(races, driverId) {
-    return races.filter((race) => race.drivers.includes(driverId));
+    return races.filter(
+      (race) =>
+        // drivers = [{id: '1234'}]
+        race.drivers.filter((driver) => driver.id === driverId).length > 0
+    );
+    // return races.filter((race) => race.drivers.includes(driverId));
   }
 
   /**
@@ -100,7 +105,7 @@ class RaceService {
    */
   calculateDriversTimeAndBestLap(race) {
     return race.drivers.map((driver) => {
-      const driverId = String(driver);
+      const driverId = driver.id;
       const laps = this.extractDriversLapsOfRace(race, driverId);
       const totalTime = parseFloat(
         laps
@@ -113,7 +118,7 @@ class RaceService {
       const bestLap = this.getBestLap(laps);
 
       return {
-        driver: driverId,
+        driver,
         totalTime,
         totalTimeString: SecondsToTime(totalTime),
         bestLap,
@@ -152,12 +157,12 @@ class RaceService {
    */
   calculateChampionshipRanking(ranks) {
     const map = ranks.reduce((accumulator, rank) => {
-      const oldDriverData = accumulator.get(rank.driver);
+      const oldDriverData = accumulator.get(rank.driver.id);
       if (!oldDriverData) {
         // delete rank.bestLap;
         const { bestLap, ...rankWithoutBestLap } = rank;
 
-        accumulator.set(rank.driver, rankWithoutBestLap);
+        accumulator.set(rank.driver.id, rankWithoutBestLap);
         return accumulator;
       }
       const totalTime = parseFloat(
@@ -170,7 +175,7 @@ class RaceService {
         points: oldDriverData.points + rank.points
       };
 
-      accumulator.set(newData.driver, newData);
+      accumulator.set(rank.driver.id, newData);
       return accumulator;
     }, new Map());
 
@@ -206,7 +211,7 @@ class RaceService {
     const ranksOfDriver = rankingOfRaces.reduce((acc, race) => {
       for (let i = 0; i < race.ranking.length; i++) {
         const ranking = race.ranking[i];
-        if (ranking.driver === driverId) {
+        if (ranking.driver.id === driverId) {
           acc.push({ name: race.name, ...ranking });
           break;
         }
