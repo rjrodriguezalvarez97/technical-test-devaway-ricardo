@@ -14,7 +14,7 @@ class RaceService {
   }
 
   getRacesOfDriverQuery(driverId) {
-    return this.Model.find({ drivers: driverId });
+    return this.Model.find({ drivers: driverId }).populate('drivers');
   }
 
   getAllRaces() {
@@ -203,22 +203,24 @@ class RaceService {
 
   /**
    * Get all the driver's rank of a championship
-   * @param {String} driverId
+   * @param {Driver} driver
    */
-  async getDriverDetails(driverId) {
+  async getDriverDetails(driver) {
+    const { id: driverId } = driver;
     const races = await this.getRacesOfDriverQuery(driverId);
     const rankingOfRaces = races.map((race) => this.getRaceRanking(race));
     const ranksOfDriver = rankingOfRaces.reduce((acc, race) => {
       for (let i = 0; i < race.ranking.length; i++) {
         const ranking = race.ranking[i];
         if (ranking.driver.id === driverId) {
-          acc.push({ name: race.name, ...ranking });
+          const { driver: _, ...rest } = ranking;
+          acc.push({ name: race.name, ...rest });
           break;
         }
       }
       return acc;
     }, []);
-    return ranksOfDriver;
+    return { driver, races: ranksOfDriver };
   }
 }
 module.exports = RaceService;

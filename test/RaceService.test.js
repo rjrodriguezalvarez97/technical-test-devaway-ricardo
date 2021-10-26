@@ -297,37 +297,36 @@ describe('RaceService tests', () => {
   });
 
   it('Should get driver details', async () => {
-    const driverId = '5fd7dbd8ce3a40582fb9ee6b';
-    const expected = [
-      {
-        name: 'Race 0',
-        driver: { id: '5fd7dbd8ce3a40582fb9ee6b' },
-        totalTime: 1163.923,
-        totalTimeString: '00:19:23.923',
-        points: 19,
-        bestLap: '00:08:20.226'
-      },
-      {
-        name: 'Race 1',
-        driver: { id: '5fd7dbd8ce3a40582fb9ee6b' },
-        totalTime: 1291.642,
-        totalTimeString: '00:21:31.642',
-        points: 25,
-        bestLap: '00:08:12.974'
-      },
-      {
-        name: 'Race 3',
-        driver: { id: '5fd7dbd8ce3a40582fb9ee6b' },
-        totalTime: 1291.642,
-        totalTimeString: '00:21:31.642',
-        points: 26,
-        bestLap: '00:08:12.974'
-      }
-    ];
+    const expected = {
+      driver: driversData[0],
+      races: [
+        {
+          name: 'Race 0',
+          totalTime: 1163.923,
+          totalTimeString: '00:19:23.923',
+          points: 19,
+          bestLap: '00:08:20.226'
+        },
+        {
+          name: 'Race 1',
+          totalTime: 1291.642,
+          totalTimeString: '00:21:31.642',
+          points: 25,
+          bestLap: '00:08:12.974'
+        },
+        {
+          name: 'Race 3',
+          totalTime: 1291.642,
+          totalTimeString: '00:21:31.642',
+          points: 26,
+          bestLap: '00:08:12.974'
+        }
+      ]
+    };
     jest
       .spyOn(raceService, 'getRacesOfDriverQuery')
       .mockImplementationOnce(() => races);
-    const result = await raceService.getDriverDetails(driverId);
+    const result = await raceService.getDriverDetails(driversData[0]);
 
     expect(result).toEqual(expected);
   });
