@@ -333,7 +333,7 @@ describe('RaceService tests', () => {
   });
 });
 
-describe('RaceService tests', () => {
+describe('RaceService database tests', () => {
   beforeAll(async () => {
     await database.connect({ server: 'localhost', database: 'karts-testing' });
   });
@@ -351,11 +351,6 @@ describe('RaceService tests', () => {
     const race = {
       name: 'My race'
     };
-    const expected = {
-      name: 'My race',
-      laps: [],
-      drivers: []
-    };
     const result = await raceService.createDocAndSave(race);
 
     expect(result.name).toEqual(race.name);
@@ -364,11 +359,4 @@ describe('RaceService tests', () => {
 
     expect(result._id.toString()).not.toBeNull();
   });
-  // it('Should throw an exception when validating the document', async () => {
-  //   const race = { drivers: ['123'] };
-  //   delete driver.name;
-  //   expect(() => driverService.createDocAndSave(driver)).toThrow(
-  //     'name is required'
-  //   );
-  // });
 });
