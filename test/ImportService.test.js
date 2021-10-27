@@ -523,6 +523,8 @@ describe('ImportService tests', () => {
 describe('ImportService database tests', () => {
   beforeAll(async () => {
     await database.connect({ server: 'localhost', database: 'karts-testing' });
+  });
+  beforeEach(async () => {
     await database.dropDatabase();
   });
   afterEach(async () => {

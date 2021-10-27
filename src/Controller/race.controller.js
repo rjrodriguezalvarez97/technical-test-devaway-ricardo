@@ -63,5 +63,21 @@ module.exports = {
     } catch (err) {
       return CustomError.handleError(err, res);
     }
+  },
+  async postRace(req, res) {
+    const { body } = req;
+    try {
+      if (body.constructor === Object && Object.keys(body).length === 0) {
+        throw new CustomError({
+          code: 400,
+          message: 'Body is empty'
+        });
+      }
+      const driver = await raceService.createDocAndSave(body);
+
+      return res.json(driver);
+    } catch (err) {
+      return CustomError.handleError(err, res);
+    }
   }
 };

@@ -13,6 +13,11 @@ class RaceService {
     return created;
   }
 
+  createDocAndSave(race) {
+    const created = this.createDoc(race);
+    return created.save();
+  }
+
   getRacesOfDriverQuery(driverId) {
     return this.Model.find({ drivers: driverId }).populate('drivers');
   }
