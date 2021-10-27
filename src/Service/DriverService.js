@@ -12,6 +12,11 @@ class DriverService {
     return created;
   }
 
+  createDocAndSave(driver) {
+    const created = this.createDoc(driver);
+    return created.save();
+  }
+
   getAllDrivers() {
     return this.Model.find({});
   }

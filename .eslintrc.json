@@ -21,6 +21,7 @@
       }
     ],
     "no-underscore-dangle": "off",
-    "class-methods-use-this": "off"
+    "class-methods-use-this": "off",
+    "operator-linebreak": "off"
   }
 }
