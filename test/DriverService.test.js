@@ -24,7 +24,7 @@ const drivers = [
   }
 ];
 
-describe('ImportService database tests', () => {
+describe('RaceService database tests', () => {
   beforeAll(async () => {
     await database.connect({ server: 'localhost', database: 'karts-testing' });
     await database.dropDatabase();
