@@ -1,5 +1,6 @@
 /* eslint-disable no-undef */
 const RaceService = require('../src/Service/RaceService');
+const database = require('../src/DatabaseConnection');
 
 const raceService = new RaceService();
 
@@ -330,4 +331,44 @@ describe('RaceService tests', () => {
 
     expect(result).toEqual(expected);
   });
+});
+
+describe('RaceService tests', () => {
+  beforeAll(async () => {
+    await database.connect({ server: 'localhost', database: 'karts-testing' });
+  });
+  beforeEach(async () => {
+    await database.dropDatabase();
+  });
+  afterEach(async () => {
+    await database.dropDatabase();
+  });
+  afterAll(() => {
+    database.disconnect();
+  });
+
+  it('Should save a race', async () => {
+    const race = {
+      name: 'My race'
+    };
+    const expected = {
+      name: 'My race',
+      laps: [],
+      drivers: []
+    };
+    const result = await raceService.createDocAndSave(race);
+
+    expect(result.name).toEqual(race.name);
+    expect(result.laps).toEqual([]);
+    expect(result.drivers).toEqual([]);
+
+    expect(result._id.toString()).not.toBeNull();
+  });
+  // it('Should throw an exception when validating the document', async () => {
+  //   const race = { drivers: ['123'] };
+  //   delete driver.name;
+  //   expect(() => driverService.createDocAndSave(driver)).toThrow(
+  //     'name is required'
+  //   );
+  // });
 });

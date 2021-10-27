@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const raceSchema = new mongoose.Schema({
-  name: String,
+  name: { type: String, required: [true, 'name is required'] },
   laps: [
     {
       driver: {

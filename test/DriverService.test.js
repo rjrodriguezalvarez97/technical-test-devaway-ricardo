@@ -24,9 +24,11 @@ const drivers = [
   }
 ];
 
-describe('RaceService database tests', () => {
+describe('DriverService database tests', () => {
   beforeAll(async () => {
     await database.connect({ server: 'localhost', database: 'karts-testing' });
+  });
+  beforeEach(async () => {
     await database.dropDatabase();
   });
   afterEach(async () => {
