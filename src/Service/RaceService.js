@@ -1,7 +1,7 @@
 const RaceModel = require('../Model/RaceModel');
 const Service = require('./ModelService');
 const { TimeToSeconds, SecondsToTime, SortRanking } = require('./UtilsService');
-// We could refactor this into a parent class
+
 class RaceService extends Service {
   constructor(model) {
     super(model || RaceModel);
