@@ -50,7 +50,7 @@ module.exports = {
           message: 'Missing driver id'
         });
       }
-      const driver = await driverService.getDriverById(id);
+      const driver = await driverService.getById(id);
       if (!driver) {
         throw new CustomError({
           code: 404,
@@ -68,13 +68,6 @@ module.exports = {
     const { body } = req;
 
     try {
-      if (body.constructor === Object && Object.keys(body).length === 0) {
-        throw new CustomError({
-          code: 400,
-          message: 'Body is empty'
-        });
-      }
-
       if (body.name === '') {
         throw new CustomError({
           code: 400,
@@ -105,14 +98,14 @@ module.exports = {
           message: 'time is required'
         });
       }
-      const race = await raceService.getRaceById(raceId);
+      const race = await raceService.getById(raceId);
       if (!race) {
         throw new CustomError({
           code: 404,
           message: 'Race not found'
         });
       }
-      const driver = await driverService.getDriverById(driverId);
+      const driver = await driverService.getById(driverId);
       if (!driver) {
         throw new CustomError({
           code: 404,
