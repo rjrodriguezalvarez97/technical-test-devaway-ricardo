@@ -320,9 +320,72 @@ Error output:
     }
 ```
 
+## Add lap
+
+Endpoint: `/race/:id/laps`
+
+HTTP Verb: `POST`
+
+Body :
+```json
+{
+    "driver": "617a78c53ad0b1a1be9c1904",
+    "time": "00:10:22.444"
+}
+```
+
+Expected output:
+```json
+{
+    "_id": "617a70b0003109eccb439bcd",
+    "name": "Race 0",
+    "drivers": [
+        "617a78c53ad0b1a1be9c1904",
+        ...
+    ],
+    "laps": [
+        {
+            "driver": "617a78c53ad0b1a1be9c1904",
+            "time": "10:00:22.444",
+            "_id": "617a810681cbc52ba06be144"
+        },
+        ...
+    ],
+    "__v": 1
+}
+```
+Error output:
+```json
+    {
+        "code": 400,
+        "message": "driver is required"
+    }
+```
+```json
+    {
+        "code": 400,
+        "message": "time is required"
+    }
+```
+```json
+    {
+        "code": 404,
+        "message": "Race not found"
+    }
+```
+```json
+    {
+        "code": 404,
+        "message": "Driver not found"
+    }
+```
 
 # Improvements
 
+## Effiency
 At the moment, the points and the timers are calculated everytime a request is made, this is not efficient at all.
 
 Perhaps the points and timers should be calculated once when the data is being imported and stored in the database and updated when a new entry is added(race, lap, driver). Maybe it would need a redesign of the database but I don't think it would be too large.
+
+## Testing
+Some REST testing could be nice, in order to check if the controller is doing the work properly
