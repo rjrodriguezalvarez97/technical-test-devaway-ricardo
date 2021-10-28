@@ -7,6 +7,7 @@ const {
   postRace,
   postLap
 } = require('../Controller/race.controller');
+const { checkEmptyBody } = require('./middlewares');
 
 const { postDriver } = require('../Controller/driver.controller');
 
@@ -18,8 +19,8 @@ module.exports = () => {
   router.get('/ranking/race', getRaceRanking);
   router.get('/ranking/', getChampionshipRanking);
   router.get('/ranking/driver/:id', getDriverDetails);
-  router.post('/driver/', postDriver);
-  router.post('/race', postRace);
+  router.post('/driver/', checkEmptyBody, postDriver);
+  router.post('/race', checkEmptyBody, postRace);
   router.post('/race/:id/laps', postLap);
 
   return router;
