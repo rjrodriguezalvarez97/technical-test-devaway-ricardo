@@ -12,6 +12,13 @@ module.exports = {
           message: 'Body is empty'
         });
       }
+
+      if (body.name === '') {
+        throw new CustomError({
+          code: 400,
+          message: 'name is required'
+        });
+      }
       const driver = await driverService.createDocAndSave(body);
 
       return res.json(driver);

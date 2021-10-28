@@ -21,7 +21,7 @@ The REST API must publish, at least, the following endpoints:
 
 The database that I chose was MongoDB along with Mongoose mainly because I hadn't had the opportunity to design a database with these tools. I think it does the job but maybe I was a little biased and thought more in a SQL-manner than I should have had.
 
-![](https://i.imgur.com/grknmKf.png)
+![](https://i.imgur.com/85XIwiw.png)
 
 Now I'd like to explain the reason for this approach. I wanted to keep a record of the drivers that ran the race in a different array in order to be able to identify if a given driver has driven the race without the need to loop over all the laps.
 
@@ -320,6 +320,70 @@ Error output:
     }
 ```
 
+## Add race
+
+Endpoint: `/race`
+
+HTTP Verb: `POST`
+
+Body :
+```json
+{
+    "name": "Race 0",
+}
+```
+Expected output:
+```json
+    {
+    "name": "carrerita",
+    "drivers": [],
+    "_id": "617a70b0003109eccb439bcd",
+    "laps": [],
+    "__v": 0
+}
+```
+Error output:
+```json
+    {
+        "code": 404,
+        "message": "name is required"
+    }
+```
+
+## Add driver
+
+Endpoint: `/driver`
+
+HTTP Verb: `POST`
+
+Body :
+```json
+{
+    "name": "Jhon doe",
+    "age": 24,
+    "picture": "https://url.com",
+    "team": "Team",
+}
+```
+
+Expected output:
+```json
+    {
+    "name": "Jhon doe",
+    "age": 24,
+    "picture": "https://url.com",
+    "team": "Team",
+    "_id": "617a78c53ad0b1a1be9c1904",
+    "__v": 0
+}
+```
+Error output:
+```json
+    {
+        "code": 404,
+        "message": "name is required"
+    }
+```
 ## Add lap
 
 Endpoint: `/race/:id/laps`
