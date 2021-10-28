@@ -85,6 +85,18 @@ module.exports = {
     const { id: raceId } = req.params;
     const { driver: driverId, time } = req.body;
     try {
+      if (!driverId) {
+        throw new CustomError({
+          code: 400,
+          message: 'driver is required'
+        });
+      }
+      if (!time) {
+        throw new CustomError({
+          code: 400,
+          message: 'time is required'
+        });
+      }
       const race = await raceService.getRaceById(raceId);
       if (!race) {
         throw new CustomError({
@@ -99,7 +111,7 @@ module.exports = {
           message: 'Driver not found'
         });
       }
-      // comprobar que time es valido
+      // TODO comprobar que time es valido
       const savedRace = await raceService.addLap(race, driver, time);
       return res.json(savedRace);
     } catch (err) {

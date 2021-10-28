@@ -7,9 +7,10 @@ const raceSchema = new mongoose.Schema({
       driver: {
         type: mongoose.Types.ObjectId,
         ref: 'Driver',
-        get: (v) => v.toString()
+        get: (v) => v.toString(),
+        required: [true, 'driver is required']
       },
-      time: String
+      time: { type: String, required: [true, 'time is required'] }
     }
   ],
   drivers: [
