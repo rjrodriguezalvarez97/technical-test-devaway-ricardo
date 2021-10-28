@@ -1,5 +1,5 @@
 const DriverModel = require('../Model/DriverModel');
-const Service = require('./Service');
+const Service = require('./ModelService');
 
 class DriverService extends Service {
   constructor(model) {
@@ -8,10 +8,6 @@ class DriverService extends Service {
 
   getAllDrivers() {
     return this.Model.find({});
-  }
-
-  getDriverById(id) {
-    return this.Model.findById(id);
   }
 }
 

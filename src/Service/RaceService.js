@@ -1,25 +1,10 @@
 const RaceModel = require('../Model/RaceModel');
+const Service = require('./ModelService');
 const { TimeToSeconds, SecondsToTime, SortRanking } = require('./UtilsService');
 // We could refactor this into a parent class
-class RaceService {
+class RaceService extends Service {
   constructor(model) {
-    this.Model = model || RaceModel;
-  }
-
-  createDoc(race) {
-    const created = new this.Model(race);
-    const error = created.validateSync();
-    if (error) throw error;
-    return created;
-  }
-
-  createDocAndSave(race) {
-    const created = this.createDoc(race);
-    return created.save();
-  }
-
-  getRaceById(id) {
-    return this.Model.findById(id);
+    super(model || RaceModel);
   }
 
   addLap(race, driver, time) {

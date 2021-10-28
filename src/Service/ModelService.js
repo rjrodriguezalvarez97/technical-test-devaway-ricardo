@@ -14,6 +14,10 @@ class Service {
     const created = this.createDoc(data);
     return created.save();
   }
+
+  getById(id) {
+    return this.Model.findById(id);
+  }
 }
 
 module.exports = Service;
