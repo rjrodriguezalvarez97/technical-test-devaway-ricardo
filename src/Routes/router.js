@@ -4,7 +4,8 @@ const {
   getRaceRanking,
   getChampionshipRanking,
   getDriverDetails,
-  postRace
+  postRace,
+  postLap
 } = require('../Controller/race.controller');
 
 const { postDriver } = require('../Controller/driver.controller');
@@ -19,6 +20,7 @@ module.exports = () => {
   router.get('/ranking/driver/:id', getDriverDetails);
   router.post('/driver/', postDriver);
   router.post('/race', postRace);
+  router.post('/race/:id/laps', postLap);
 
   return router;
 };

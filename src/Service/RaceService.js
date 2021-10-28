@@ -18,6 +18,19 @@ class RaceService {
     return created.save();
   }
 
+  getRaceById(id) {
+    return this.Model.findById(id);
+  }
+
+  addLap(race, driver, time) {
+    const driverId = driver.id;
+    if (!race.drivers.includes(driverId)) {
+      race.drivers.push(driverId);
+    }
+    race.laps.push({ driver: driverId, time });
+    return race.save();
+  }
+
   getRacesOfDriverQuery(driverId) {
     return this.Model.find({ drivers: driverId }).populate('drivers');
   }
