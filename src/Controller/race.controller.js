@@ -66,11 +66,19 @@ module.exports = {
   },
   async postRace(req, res) {
     const { body } = req;
+
     try {
       if (body.constructor === Object && Object.keys(body).length === 0) {
         throw new CustomError({
           code: 400,
           message: 'Body is empty'
+        });
+      }
+
+      if (body.name === '') {
+        throw new CustomError({
+          code: 400,
+          message: 'name is required'
         });
       }
       const driver = await raceService.createDocAndSave(body);
